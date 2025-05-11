@@ -1,13 +1,20 @@
 name: 4. Build Trio
 run-name: Build Trio (${{ github.ref_name }})
+feat/dana
 
+main
 on:
   workflow_dispatch: {}
   schedule:
     - cron: "0 8 * * 3"
     - cron: "0 6 1 * *"
+feat/dana
 
 
+
+
+
+main
 env:
   UPSTREAM_REPO: nightscout/Trio
   UPSTREAM_BRANCH: ${{ github.ref_name }}
@@ -16,6 +23,10 @@ env:
   ALIVE_BRANCH_DEV: alive-dev
 
 jobs:
+feat/dana
+  # Checks if Distribution certificate is present and valid, optionally nukes and
+  # creates new certs if the repository variable ENABLE_NUKE_CERTS == 'true'
+main
   check_certs:
     name: Check certificates
     uses: ./.github/workflows/create_certs.yml
@@ -115,15 +126,25 @@ jobs:
           echo "### :calendar: Scheduled Sync and Build Disabled :mobile_phone_off:" >> $GITHUB_STEP_SUMMARY
           echo "You have not yet configured the scheduled sync and build for Trio's browser build." >> $GITHUB_STEP_SUMMARY
           echo "Synchronizing your fork of <code>Trio</code> with the upstream repository <code>nightscout/Trio</code> will be skipped." >> $GITHUB_STEP_SUMMARY
+feat/dana
+          echo "If you want to enable automatic builds and updates for your Trio, please follow the instructions \
+              under the following path <code>Trio/fastlane/testflight.md</code>." >> $GITHUB_STEP_SUMMARY
+
+  # Builds Trio
           echo "If you want to enable automatic builds and updates for your Trio, please follow the instructions \              under the following path <code>Trio/fastlane/testflight.md</code>." >> $GITHUB_STEP_SUMMARY
 
+main
   build:
     name: Build
     needs: [check_certs, check_alive_and_permissions, check_latest_from_upstream]
 HEAD
       permissions:
       contents: write
+feat/dana
+    if: | # runs if started manually, or if sync schedule is set and enabled and scheduled on the first Saturday each month, or if sync schedule is set and enabled and new commits were found
+
     if: |
+main
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'schedule' && needs.check_alive_and_permissions.outputs.WORKFLOW_PERMISSION == 'true') ||
       (needs.check_latest_from_upstream.outputs.NEW_COMMITS == 'true')
@@ -136,10 +157,13 @@ HEAD
 +        run: |
 +          sudo xcode-select --switch /Applications/Xcode_16.3.app/Contents/Developer
       - name: Select Xcode version
+feat/dana
+        run: 'sudo xcode-select --switch /Applications/Xcode_16.3.app/Contents/Developer'
         run: "sudo xcode-select --switch /Applications/Xcode_16.2.app/Contents/Developer"
         run: "sudo xcode-select --switch /Applications/Xcode_16.3.app/Contents/Developer"
 main
       
+main
       - name: Checkout Repo for syncing
         if: |
           needs.check_alive_and_permissions.outputs.WORKFLOW_PERMISSION == 'true' &&
